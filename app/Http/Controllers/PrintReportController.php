@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Donation;
 use App\Models\Collection;
 use App\Support\DonationMetrics;
 use Illuminate\Contracts\View\View;
@@ -28,13 +27,15 @@ class PrintReportController extends Controller
         }
 
         return view('reports.print', [
-            'collection' => Collection::query()->where('is_active', true)->orderBy('id')->first(),
+            'collection' => $request->user()?->isAdmin()
+                ? Collection::query()->where('is_active', true)->orderBy('id')->first()
+                : Collection::query()->where('user_id', $request->user()?->id)->where('is_active', true)->orderBy('id')->first(),
             'totals' => DonationMetrics::totals(),
             'localities' => DonationMetrics::localitySummary(),
             'lakous' => DonationMetrics::lakouSummary(),
             'sort' => $sort,
             'direction' => $direction,
-            'donations' => Donation::query()
+            'donations' => DonationMetrics::donationQuery()
                 ->with('collection')
                 ->orderBy($sort, $direction)
                 ->orderBy('id')

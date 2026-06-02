@@ -3,23 +3,41 @@
 namespace App\Support;
 
 use App\Models\Donation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DonationMetrics
 {
     public static function totals(): array
     {
-        $totalPaid = (float) Donation::query()->where('is_paid', true)->sum('amount');
-        $totalUnpaid = (float) Donation::query()->where('is_paid', false)->sum('amount');
+        $totalPaid = (float) self::donationQuery()->where('is_paid', true)->sum('amount');
+        $totalUnpaid = (float) self::donationQuery()->where('is_paid', false)->sum('amount');
         $grandTotal = $totalPaid + $totalUnpaid;
 
         return [
             'total_paid' => $totalPaid,
             'total_unpaid' => $totalUnpaid,
             'grand_total' => $grandTotal,
-            'donation_count' => Donation::query()->count(),
+            'donation_count' => self::donationQuery()->count(),
         ];
+    }
+
+    public static function donationQuery(): Builder
+    {
+        $query = Donation::query();
+        $user = Auth::user();
+
+        if (! $user) {
+            return $query;
+        }
+
+        if ($user->isAdmin()) {
+            return $query;
+        }
+
+        return $query->whereHas('collection', fn (Builder $query) => $query->where('user_id', $user->id));
     }
 
     public static function localitySummary(): SupportCollection
@@ -34,9 +52,9 @@ class DonationMetrics
 
     private static function summaryFor(string $column): SupportCollection
     {
-        $grandTotal = (float) Donation::query()->sum('amount');
+        $grandTotal = (float) self::donationQuery()->sum('amount');
 
-        return Donation::query()
+        return self::donationQuery()
             ->select([
                 DB::raw("coalesce(nullif(trim({$column}), ''), 'Unspecified') as name"),
                 DB::raw('count(*) as donation_count'),

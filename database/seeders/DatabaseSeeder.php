@@ -20,14 +20,17 @@ class DatabaseSeeder extends Seeder
         Lakou::query()->delete();
         Locality::query()->delete();
 
-        User::query()->updateOrCreate([
+        $admin = User::query()->updateOrCreate([
             'email' => 'admin@example.com',
         ], [
             'name' => 'Admin User',
             'password' => 'password',
+            'is_admin' => true,
+            'is_active' => true,
         ]);
 
         $collection = Collection::query()->create([
+            'user_id' => $admin->id,
             'name' => 'Tomazo Pa Peri Maraton Pou legliz st anne',
             'description' => 'Seeded from the Tomazo Pap Peri St Anne donation spreadsheet.',
             'is_active' => true,

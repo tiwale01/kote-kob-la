@@ -19,6 +19,10 @@ class CollectionsTable
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('user.name')
+                    ->label('Owner')
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('donations_count')
                     ->label('Donation Count')
                     ->counts('donations')

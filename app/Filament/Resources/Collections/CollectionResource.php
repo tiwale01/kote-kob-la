@@ -13,6 +13,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class CollectionResource extends Resource
 {
@@ -30,6 +32,18 @@ class CollectionResource extends Resource
     public static function table(Table $table): Table
     {
         return CollectionsTable::configure($table);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        if ($user?->isAdmin()) {
+            return $query;
+        }
+
+        return $query->where('user_id', $user?->id);
     }
 
     public static function getRelations(): array

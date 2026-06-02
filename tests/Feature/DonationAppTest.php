@@ -22,6 +22,12 @@ class DonationAppTest extends TestCase
         $this->assertSame('10640', (string) Donation::query()->sum('amount'));
     }
 
+    public function test_report_requires_login(): void
+    {
+        $this->get('/reports/print')
+            ->assertRedirect('/login');
+    }
+
     public function test_authenticated_dashboard_and_report_render_database_totals(): void
     {
         $this->seed();
@@ -36,7 +42,8 @@ class DonationAppTest extends TestCase
             ->assertSee('10,640.00')
             ->assertSee('Trou-Caïman');
 
-        $this->get('/reports/print')
+        $this->actingAs($user)
+            ->get('/reports/print')
             ->assertOk()
             ->assertSee('VIP Tcho')
             ->assertSee('Madan Blanc')

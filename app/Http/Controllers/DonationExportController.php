@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Donation;
+use App\Support\DonationMetrics;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Writer\XLSX\Options;
 use OpenSpout\Writer\XLSX\Writer;
@@ -35,7 +36,7 @@ class DonationExportController extends Controller
                 'Notes',
             ]));
 
-            Donation::query()
+            DonationMetrics::donationQuery()
                 ->with('collection')
                 ->orderBy('donor_name')
                 ->each(function (Donation $donation) use ($writer): void {

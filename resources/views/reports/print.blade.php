@@ -121,7 +121,7 @@
             text-align: center;
         }
         .summary td { background: #ffffff; }
-        @page { margin: .25in; size: 11in 8.5in; }
+        @page { margin: .25in; }
         @media (max-width: 900px) {
             body { overflow-x: auto; }
             .toolbar, .sheet { min-width: 980px; }
@@ -171,7 +171,7 @@
 </head>
 <body>
     <div class="toolbar">
-        <div class="hint">Click a blue column header to sort the report.</div>
+        <div class="hint">Click a blue column header to sort. For PDF, choose Landscape in the print dialog.</div>
         <div class="toolbar-actions">
             <a class="btn secondary" href="{{ route('filament.admin.pages.reports') }}">Reports</a>
             <a class="btn secondary" href="{{ route('filament.admin.resources.donations.index') }}">Enter Donations</a>

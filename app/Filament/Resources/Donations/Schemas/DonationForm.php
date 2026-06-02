@@ -10,6 +10,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class DonationForm
 {
@@ -19,10 +20,10 @@ class DonationForm
             ->components([
                 Select::make('collection_id')
                     ->label('Collection')
-                    ->options(fn () => Collection::query()->orderBy('name')->pluck('name', 'id')->all())
+                    ->options(fn () => self::collectionOptions())
                     ->searchable()
                     ->required()
-                    ->default(fn () => Collection::query()->where('is_active', true)->orderBy('id')->value('id')),
+                    ->default(fn () => self::collectionQuery()->where('is_active', true)->orderBy('id')->value('id')),
                 TextInput::make('donor_name')
                     ->label('Donor Name')
                     ->required()
@@ -67,5 +68,22 @@ class DonationForm
                     ->rows(3)
                     ->columnSpanFull(),
             ]);
+    }
+
+    private static function collectionQuery()
+    {
+        $query = Collection::query()->orderBy('name');
+        $user = Auth::user();
+
+        if (! $user?->isAdmin()) {
+            $query->where('user_id', $user?->id);
+        }
+
+        return $query;
+    }
+
+    private static function collectionOptions(): array
+    {
+        return self::collectionQuery()->pluck('name', 'id')->all();
     }
 }

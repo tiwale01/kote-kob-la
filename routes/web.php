@@ -8,5 +8,11 @@ Route::get('/', function () {
     return redirect('/admin/donation-dashboard');
 });
 
-Route::get('/donations/export', DonationExportController::class)->name('donations.export');
-Route::get('/reports/print', PrintReportController::class)->name('reports.print');
+Route::get('/login', function () {
+    return redirect('/admin/login');
+})->name('login');
+
+Route::middleware('auth')->group(function (): void {
+    Route::get('/donations/export', DonationExportController::class)->name('donations.export');
+    Route::get('/reports/print', PrintReportController::class)->name('reports.print');
+});
