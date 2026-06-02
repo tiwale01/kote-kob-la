@@ -121,7 +121,7 @@
             text-align: center;
         }
         .summary td { background: #ffffff; }
-        @page { margin: .25in; size: letter; }
+        @page { margin: .25in; size: 11in 8.5in; }
         @media (max-width: 900px) {
             body { overflow-x: auto; }
             .toolbar, .sheet { min-width: 980px; }
@@ -129,7 +129,7 @@
         @media print {
             body {
                 background: #ffffff;
-                font-size: 9px;
+                font-size: 11px;
                 padding: 0;
             }
             .toolbar { display: none; }
@@ -141,30 +141,30 @@
                 width: 100%;
             }
             .title {
-                font-size: 12px;
-                line-height: 20px;
+                font-size: 15px;
+                line-height: 24px;
             }
             .spacer {
-                height: 10px;
+                height: 12px;
             }
             .totals td {
-                height: 18px;
+                height: 22px;
             }
             .data th,
             .data td,
             .summary th,
             .summary td {
-                height: 13px;
-                padding: 0 2px;
+                height: 15px;
+                padding: 1px 3px;
             }
             .right-pad {
-                padding: 22px 6px 0 12px;
+                padding: 28px 8px 0 18px;
             }
             .summary-panel {
-                margin-top: 14px;
+                margin-top: 18px;
             }
             .summary-panel.lakou {
-                margin-top: 150px;
+                margin-top: 230px;
             }
         }
     </style>
