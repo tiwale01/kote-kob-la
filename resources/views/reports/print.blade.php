@@ -121,19 +121,50 @@
             text-align: center;
         }
         .summary td { background: #ffffff; }
-        @page { margin: .25in; size: landscape; }
+        @page { margin: .25in; size: letter; }
         @media (max-width: 900px) {
             body { overflow-x: auto; }
             .toolbar, .sheet { min-width: 980px; }
         }
         @media print {
-            body { background: #ffffff; padding: 0; }
+            body {
+                background: #ffffff;
+                font-size: 9px;
+                padding: 0;
+            }
             .toolbar { display: none; }
             .sheet {
                 border: 1px solid #111827;
+                grid-template-columns: minmax(0, 1.85fr) minmax(250px, .8fr);
                 max-width: none;
                 min-height: 0;
                 width: 100%;
+            }
+            .title {
+                font-size: 12px;
+                line-height: 20px;
+            }
+            .spacer {
+                height: 10px;
+            }
+            .totals td {
+                height: 18px;
+            }
+            .data th,
+            .data td,
+            .summary th,
+            .summary td {
+                height: 13px;
+                padding: 0 2px;
+            }
+            .right-pad {
+                padding: 22px 6px 0 12px;
+            }
+            .summary-panel {
+                margin-top: 14px;
+            }
+            .summary-panel.lakou {
+                margin-top: 150px;
             }
         }
     </style>
